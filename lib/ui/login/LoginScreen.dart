@@ -1,12 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/ui/DialogUtils.dart';
 import 'package:todo_app/ui/common/CustomFormField.dart';
+import 'package:todo_app/ui/home/HomeScreen.dart';
 
+import '../../FirebaseErrorCodes.dart';
+import '../../Providers/AuthProvider.dart';
 import '../../ValidationUtils.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
  static const String routeName = 'login';
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
  TextEditingController email = TextEditingController();
+
  TextEditingController password = TextEditingController();
 
  var formKey = GlobalKey<FormState>();
@@ -70,9 +82,25 @@ class LoginScreen extends StatelessWidget {
         ));
   }
 
-  void login() {
+  void login() async{
     if (formKey.currentState?.validate()== false){
       return ;
+    }
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      DialogUtils.showLoading(context, 'Loading...',isCancelable: false);
+      await authProvider.login(email.text, password.text);
+      DialogUtils.hideDialog(context);
+      DialogUtils.showMessage(context, 'User logged in successfully',
+      positiveActionTitle: 'Ok ',
+      positiveAction: (){
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == FirebaseErrorCodes.user_not_found || e.code == FirebaseErrorCodes.wrong_password||
+      e.code == FirebaseErrorCodes.invalid_credentials) {
+       DialogUtils.showMessage(context, 'Wrong email or password', positiveActionTitle: 'Ok');
+      }
     }
   }
 }

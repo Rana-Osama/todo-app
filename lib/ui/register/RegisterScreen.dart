@@ -1,16 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/FirebaseErrorCodes.dart';
+import 'package:todo_app/Providers/AuthProvider.dart';
+import 'package:todo_app/ui/DialogUtils.dart';
 import 'package:todo_app/ui/common/CustomFormField.dart';
+import 'package:todo_app/ui/login/LoginScreen.dart';
 
 import '../../ValidationUtils.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
  static const String routeName = 'register';
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
  TextEditingController fullName = TextEditingController();
+
  TextEditingController userName = TextEditingController();
+
  TextEditingController email = TextEditingController();
+
  TextEditingController password = TextEditingController();
+
  TextEditingController passwordConfirmation = TextEditingController();
+
  var formKey = GlobalKey<FormState>();
 
   @override
@@ -80,7 +96,7 @@ class RegisterScreen extends StatelessWidget {
                             return 'Please enter password confirmation';
                           }
                           if(password.text != text){
-                            return "Password deosn't match";
+                            return "Password doesn't match";
                           }
 
                           return null;
@@ -100,10 +116,29 @@ class RegisterScreen extends StatelessWidget {
         ));
   }
 
-  void createAccount() {
+  void createAccount() async {
     if (formKey.currentState?.validate()== false){
       return ;
     }
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      DialogUtils.showMessage(context, 'Loading...');
+      await authProvider.register(userName.text, fullName.text, email.text, password.text);
+      DialogUtils.showMessage(context, 'Registered successfully',
+      positiveActionTitle: 'Ok',
+      positiveAction: (){
+        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == FirebaseErrorCodes.weak_password) {
+        DialogUtils.showMessage(context,'The password provided is too weak.');
+      } else if (e.code == FirebaseErrorCodes.email_used) {
+        DialogUtils.showMessage(context ,'The account already exists for that email.');
+      }
+    } catch (e) {
+      DialogUtils.showMessage(context,'Something went wrong ');
+    }
+
   }
 }
 
