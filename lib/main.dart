@@ -11,8 +11,11 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(ChangeNotifierProvider(
-      create: (BuildContext) => AuthProvider(), child: const MyApp()));
+  runApp(MultiProvider(
+     providers: [
+       ChangeNotifierProvider(create: (context) => AuthProvider())
+     ],
+      child: const MyApp()));
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
