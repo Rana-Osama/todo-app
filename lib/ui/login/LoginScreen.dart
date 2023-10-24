@@ -34,6 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 image: AssetImage('assets/images/auth_pattern.png'),
                 fit: BoxFit.fill)),
         child: Scaffold(
+          appBar: AppBar(
+          title: Center(child: Text('Todo App         ')),
+            titleTextStyle: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold
+            ),
+            backgroundColor: Colors.transparent,
+          ),
           backgroundColor: Colors.transparent,
           body: Container(
             padding: EdgeInsets.all(12),
@@ -74,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       },
                       controller: password,
+                      icon: Icons.remove_red_eye_rounded,
                     ),
                     SizedBox(
                       height: 25,

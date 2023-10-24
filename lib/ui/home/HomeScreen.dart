@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/Providers/AuthProvider.dart';
 import 'package:todo_app/ui/DialogUtils.dart';
+import 'package:todo_app/ui/home/AddTaskSheet.dart';
 import 'package:todo_app/ui/home/settings/SettingsTab.dart';
 import 'package:todo_app/ui/home/tasksList/TasksListTab.dart';
 import 'package:todo_app/ui/login/LoginScreen.dart';
@@ -27,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showAddTaskBottomSheet();
+        },
         child: Icon(Icons.add),
         shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 4)),
       ),
@@ -69,5 +72,12 @@ class _HomeScreenState extends State<HomeScreen> {
         negativeAction: () {
           DialogUtils.hideDialog(context);
         });
+  }
+
+  void showAddTaskBottomSheet() {
+    showModalBottomSheet(context: context, builder: (buildcontext){
+      return AddTaskSheet();
+    }
+    );
   }
 }
