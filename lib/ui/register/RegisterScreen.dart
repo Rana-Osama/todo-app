@@ -8,7 +8,7 @@ import 'package:todo_app/ui/DialogUtils.dart';
 import 'package:todo_app/ui/common/CustomFormField.dart';
 import 'package:todo_app/ui/login/LoginScreen.dart';
 import 'package:todo_app/database/model/User.dart' as MyUser;
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../ValidationUtils.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -41,13 +41,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 fit: BoxFit.fill)),
         child: Scaffold(
           appBar: AppBar(
-            title: Center(child: Text('Todo App         ')),
-            titleTextStyle: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold
-            ),
-            backgroundColor: Colors.transparent,
-          ),
+              title: Center(
+                  child: Text(AppLocalizations.of(context)!.create_account)),
+              titleTextStyle: Theme.of(context).textTheme.headlineSmall),
           backgroundColor: Colors.transparent,
           body: Container(
             padding: EdgeInsets.all(12),
@@ -58,54 +54,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
-                      height: 270,
+                      height: 180,
                     ),
                     CustomFormField(
-                      hint: 'Full Name',
+                      hint: AppLocalizations.of(context)!.full_name,
                       keyboardType: TextInputType.name,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter full name';
+                          return AppLocalizations.of(context)!.full_name_error;
                         }
                         return null;
                       },
                       controller: fullName,
                     ),
                     CustomFormField(
-                      hint: 'User Name',
+                      hint: AppLocalizations.of(context)!.user_name,
                       keyboardType: TextInputType.name,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter user name';
+                          return AppLocalizations.of(context)!.user_name_error;
                         }
                         return null;
                       },
                       controller: userName,
                     ),
                     CustomFormField(
-                      hint: 'Email',
+                      hint: AppLocalizations.of(context)!.email,
                       keyboardType: TextInputType.emailAddress,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter email';
+                          return AppLocalizations.of(context)!.email_error1;
                         }
                         if (!isValidEmail(text)) {
-                          return 'Email bad format';
+                          return AppLocalizations.of(context)!.email_bad_error;
                         }
                         return null;
                       },
                       controller: email,
                     ),
                     CustomFormField(
-                      hint: 'Password',
+                      hint: AppLocalizations.of(context)!.password,
                       keyboardType: TextInputType.text,
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter password';
+                          return AppLocalizations.of(context)!.password_error;
                         }
                         if (text.length < 6) {
-                          return 'Password should be at least 6 characters';
+                          return AppLocalizations.of(context)!
+                              .password_error_num;
                         }
                         return null;
                       },
@@ -113,15 +110,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       icon: Icons.remove_red_eye_rounded,
                     ),
                     CustomFormField(
-                      hint: 'Password Confirmation',
+                      hint: AppLocalizations.of(context)!.password_confirmation,
                       keyboardType: TextInputType.text,
                       secureText: true,
                       validator: (text) {
                         if (text == null || text.trim().isEmpty) {
-                          return 'Please enter password confirmation';
+                          return AppLocalizations.of(context)!
+                              .password_confirmation_error;
                         }
                         if (password.text != text) {
-                          return "Password doesn't match";
+                          return AppLocalizations.of(context)!
+                              .password_confirmation_error_match;
                         }
 
                         return null;
@@ -136,13 +135,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onPressed: () {
                           createAccount();
                         },
-                        child: Text('Create Account')),
+                        child: Text(
+                            AppLocalizations.of(context)!.create_account,
+                            style: Theme.of(context).textTheme.titleLarge)),
                     TextButton(
                         onPressed: () {
                           Navigator.pushReplacementNamed(
                               context, LoginScreen.routeName);
                         },
-                        child: Text('Already have account ?'))
+                        child: Text(AppLocalizations.of(context)!.have_account))
                   ],
                 ),
               ),
@@ -157,23 +158,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
     var authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      DialogUtils.showMessage(context, 'Loading...');
+      DialogUtils.showMessage(context, AppLocalizations.of(context)!.loading);
       await authProvider.register(
           userName.text, fullName.text, email.text, password.text);
       DialogUtils.hideDialog(context);
-      DialogUtils.showMessage(context, 'Registered successfully',
-          positiveActionTitle: 'Ok', positiveAction: () {
+      DialogUtils.showMessage(
+          context, AppLocalizations.of(context)!.registered_successfully,
+          positiveActionTitle: AppLocalizations.of(context)!.ok,
+          positiveAction: () {
         Navigator.pushReplacementNamed(context, LoginScreen.routeName);
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == FirebaseErrorCodes.weak_password) {
-        DialogUtils.showMessage(context, 'The password provided is too weak.');
+        DialogUtils.showMessage(
+            context, AppLocalizations.of(context)!.weak_password);
       } else if (e.code == FirebaseErrorCodes.email_used) {
         DialogUtils.showMessage(
-            context, 'The account already exists for that email.');
+            context, AppLocalizations.of(context)!.email_used);
       }
     } catch (e) {
-      DialogUtils.showMessage(context, 'Something went wrong ');
+      DialogUtils.showMessage(
+          context, AppLocalizations.of(context)!.something_wrong);
     }
   }
 }

@@ -7,13 +7,17 @@ class DialogUtils {
         context: context,
         builder: (buildContext) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             content: Row(
               children: [
                 CircularProgressIndicator(),
                 SizedBox(
                   width: 20,
                 ),
-                Text(message)
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
               ],
             ),
           );
@@ -38,21 +42,26 @@ class DialogUtils {
           onPressed: () {
             positiveAction?.call();
           },
-          child: Text(positiveActionTitle)));
+          child: Text(positiveActionTitle,
+              style: Theme.of(context).textTheme.bodyMedium)));
     }
     if (negativeActionTitle != null) {
       actions.add(TextButton(
           onPressed: () {
             negativeAction?.call();
           },
-          child: Text(negativeActionTitle)));
+          child: Text(negativeActionTitle,
+              style: Theme.of(context).textTheme.bodyMedium)));
     }
     showDialog(
         context: context,
         builder: (buildContext) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             actions: actions,
-            content: Expanded(child: Text(message)),
+            content: Expanded(
+                child: Text(message,
+                    style: Theme.of(context).textTheme.bodyMedium)),
           );
         },
         barrierDismissible: isCancelable);
