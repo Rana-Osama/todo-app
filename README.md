@@ -1,16 +1,17 @@
 # todo
 
-A new Flutter project.
+A Flutter project using Firebase services ( authentication and Firestore database ) that supports english and arabic languages 
 
-## Getting Started
+Features:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- splash screen
+- Auto login 
+- Adding tasks
+- Editing tasks
+- Deleting tasks
+- Check box to mark the finished tasks 
+- Calender to choose the task day
+- Filtering tasks by date
+- Multilingual
+- Light and Dark modes 
+- Applying shared preference for theme and language 
